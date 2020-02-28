@@ -10,8 +10,8 @@ import QtQuick.Window 2.12
 
 Window {
     visible: true
-    width: 640
-    height: 480
+    width: 1080
+    height: 720
     title: qsTr("Hello World")
 //    MapItem{
 //        id: iMapItem
@@ -20,52 +20,43 @@ Window {
 
     property var mapParent
 
+    Timer {
+        id: tabInitTimer
+        interval: 200; running: true; repeat: false
+        onTriggered: tabViewRoot.currentIndex = 1;
+    }
+    Component.onCompleted:
+    {
+        tabInitTimer.start();
+    }
+
     TabView {
         id: tabViewRoot
         anchors.fill: parent
-        Component.onCompleted:
-        {
-            tabViewRoot.currentIndex = 2;
-        }
 
         onCurrentIndexChanged:
         {
-            console.log("Current index changed");
             if (currentIndex == 0)
             {
                 setMapByObjectName(tabViewRoot, "mapTabRoot");
                 setParentByObjectName( tabViewRoot, "mapTabMapParent" );
-                iMapItem.state = "mapTabParent";
             }
             else if( currentIndex == 1)
             {
                 setMapByObjectName(tabViewRoot, "configTabRoot")
                 setParentByObjectName( tabViewRoot, "configTabMapParent" );
-                iMapItem.state = "configTabParent";
             }
         }
 
         Tab {
             title: "Red"
-            z:1
-            MapTabB
-            {
-                id: iMapTab
-                z:1
-            }
+            MapTabB{}
         }
         Tab {
             title: "Blue"
-            z:1
-            ConfigTab
-            {
-                id: iConfigTab
-                z:1
-              //  configRoot.mapItem: iMapId
-            }
+            ConfigTab{}
         }
         Tab {
-            z:1
             title: "MQTT"
             Rectangle { color: "green" }
         }
@@ -73,17 +64,6 @@ Window {
         {
             id: iMapItem
             //anchors.fill: parent
-            states:
-                [
-                State {
-                name: "configTabParent"
-                ParentChange { target: iMapItem; parent: mapParent; width: mapParent.width; height: mapParent.height }
-                    },
-                State {
-                    name: "mapTabParent"
-                    ParentChange { target: iMapItem; parent: mapParent; width: mapParent.width; height: mapParent.height}
-                    }
-                ]
         }
     }
 
@@ -93,7 +73,11 @@ Window {
         {
         for(var i = 0; i < rootObject.children.length; ++i)
             if( rootObject.children[i].objectName===inputObjectName ){
-                mapParent = rootObject.children[i];
+                iMapItem.parent = rootObject.children[i];
+                iMapItem.width =  rootObject.children[i].width;
+                iMapItem.height = rootObject.children[i].height;
+                iMapItem.x = rootObject.children[i].x;
+                iMapItem.y = rootObject.children[i].y;
             }
             else
             {
@@ -112,7 +96,7 @@ Window {
             }
             else
             {
-                setParentByObjectName(rootObject.children[i], inputObjectName );
+                setMapByObjectName(rootObject.children[i], inputObjectName );
             }
         }
     }
