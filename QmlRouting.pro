@@ -37,7 +37,6 @@ DISTFILES += \
     AddressSearchView.qml \
     ConfigTab.qml \
     MapItem.qml \
-    MapTab.qml \
     MapTabB.qml \
     MapTabBForm.ui.qml \
     Marker.qml \

@@ -7,7 +7,6 @@
         <file>VehicleButtons.qml</file>
         <file>VehicleButtonsForm.ui.qml</file>
         <file>MapItem.qml</file>
-        <file>MapTab.qml</file>
         <file>MapTabB.qml</file>
         <file>MapTabBForm.ui.qml</file>
     </qresource>

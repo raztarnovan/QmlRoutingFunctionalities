@@ -10,19 +10,15 @@ import QtQuick.Window 2.12
 
 Window {
     visible: true
-    width: 1080
+    width: 1280
     height: 720
-    title: qsTr("Hello World")
-//    MapItem{
-//        id: iMapItem
-//        anchors.fill: parent
-//    }
+    title: qsTr("Route Calculation Demo")
 
-    property var mapParent
+    property MapItem mapItem: MapItem{}
 
     Timer {
         id: tabInitTimer
-        interval: 200; running: true; repeat: false
+        interval: 100; running: true; repeat: false
         onTriggered: tabViewRoot.currentIndex = 1;
     }
     Component.onCompleted:
@@ -39,49 +35,44 @@ Window {
             if (currentIndex == 0)
             {
                 setMapByObjectName(tabViewRoot, "mapTabRoot");
-                setParentByObjectName( tabViewRoot, "mapTabMapParent" );
+                setMapParentByObjectName( tabViewRoot, "mapTabMapParent" );
             }
             else if( currentIndex == 1)
             {
                 setMapByObjectName(tabViewRoot, "configTabRoot")
-                setParentByObjectName( tabViewRoot, "configTabMapParent" );
+                setMapParentByObjectName( tabViewRoot, "configTabMapParent" );
             }
         }
 
         Tab {
-            title: "Red"
+            title: "Map"
             MapTabB{}
         }
         Tab {
-            title: "Blue"
+            title: "Configuration"
             ConfigTab{}
         }
         Tab {
             title: "MQTT"
             Rectangle { color: "green" }
         }
-        MapItem
-        {
-            id: iMapItem
-            //anchors.fill: parent
-        }
     }
 
-    function setParentByObjectName(rootObject, inputObjectName )
+    function setMapParentByObjectName(rootObject, inputObjectName )
     {
         if( rootObject !== undefined && rootObject !== null )
         {
         for(var i = 0; i < rootObject.children.length; ++i)
             if( rootObject.children[i].objectName===inputObjectName ){
-                iMapItem.parent = rootObject.children[i];
-                iMapItem.width =  rootObject.children[i].width;
-                iMapItem.height = rootObject.children[i].height;
-                iMapItem.x = rootObject.children[i].x;
-                iMapItem.y = rootObject.children[i].y;
+                mapItem.parent = rootObject.children[i];
+                mapItem.width =  rootObject.children[i].width;
+                mapItem.height = rootObject.children[i].height;
+                mapItem.x = rootObject.children[i].x;
+                mapItem.y = rootObject.children[i].y;
             }
             else
             {
-                setParentByObjectName(rootObject.children[i], inputObjectName );
+                setMapParentByObjectName(rootObject.children[i], inputObjectName );
             }
         }
     }
@@ -92,7 +83,7 @@ Window {
         {
         for(var i = 0; i < rootObject.children.length; ++i)
             if( rootObject.children[i].objectName===inputObjectName ){
-                rootObject.children[i].mapItem = iMapItem;
+                rootObject.children[i].mapItem = mapItem;
             }
             else
             {

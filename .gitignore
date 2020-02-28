@@ -32,3 +32,4 @@ _ReSharper*/
 packages/
 *.vcxproj*
 /.qmake.stash
+*.autosave
